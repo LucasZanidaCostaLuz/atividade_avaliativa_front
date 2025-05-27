@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "./home.module.css";
+import Button from "../components/button";
 
 export default function Home() {
     return (
@@ -15,9 +16,7 @@ export default function Home() {
                     <li className={styles.li}>nome da atividade: Mapa de Ocorrências Urbanas</li>
                     <li className={styles.li}>A API retorna bairros e ocorrências de segurança urbana. Cada ocorrência pertence a um bairro específico.</li>
                 </ul>
-                <button className={styles.button}>
-                    <Link href="/Mapa" className={styles.link} prefetch={true}> Link para próxima pagina</Link>
-                </button>
+                <Button href="/Mapa" titulo="ir para Mapa" />
             </div>
             </div>
         </ div>

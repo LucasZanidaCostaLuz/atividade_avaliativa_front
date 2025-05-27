@@ -1,0 +1,16 @@
+  .button {
+    background-color: #604848;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    align-items: center ;;
+}
+
+.link {
+    text-decoration: none;
+    color: #fdfdfd;
+}

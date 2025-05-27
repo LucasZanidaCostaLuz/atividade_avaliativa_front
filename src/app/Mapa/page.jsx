@@ -7,6 +7,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import {Image} from "next/image";
 import { useRouter } from "next/navigation"; 
+import Button from "../components/button";
 
 const HEADERS = {'x-api-key': process.env.NEXT_PUBLIC_API_KEY}
 
@@ -122,6 +123,7 @@ export default function Mapa() {
                     <p>Nenhuma ocorrência encontrada.</p>
                 )}
             </Modal>
+            <Button href="/Home" titulo="Voltar para Home" />
             <ToastContainer position='top-right' autoClose={4500} />
         </div>
     ) 
