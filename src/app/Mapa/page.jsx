@@ -6,11 +6,11 @@ import { Skeleton, Pagination, Card, Modal } from "antd";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import {Image} from "next/image";
-import { useRouter } from "next/navigation"; // Adicionado o import do useRouter
+import { useRouter } from "next/navigation"; 
 
 const HEADERS = {'x-api-key': process.env.NEXT_PUBLIC_API_KEY}
 
-export default function Bairros() {
+export default function Mapa() {
     const [data, setData] = useState({
         bairros: [],
         loading: false,
@@ -31,39 +31,32 @@ export default function Bairros() {
     useEffect(() => {
         const fetchBairros = async () => {
             try {
-            const response = await axios.get('http://localhost:4000/api/bairros', {
-                headers: {
-                'x-api-key': '15D2dm2RED0umccWIl6A'
-                }
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/bairros`, {
+                headers: HEADERS
             });
-            setData(prev => ({
-                ...prev,
-                bairros: response.data,
-                loading: false,
-            }));
+            setData((d) => ({...d, bairros: response.data, loading: false,}));
             toast.success('Bairros carregados com sucesso!');
             } catch (error) {
             toast.error('Erro ao buscar bairros!');
-            setData(prev => ({ ...prev, loading: false }));
+            setData((d) => ({ ...d, loading: false }));
             }
         };
 
         fetchBairros();
     }, []);
 
-    const handleCardClick = async (bairro) => {
-        setModalInfo({ visible: true, bairro: bairro.nome, ocorrencias: null, loading: true });
-
+        const openModal = async (bairro, ocorrencia) => {
         try {
-            const response = await axios.get(`${NEXT_PUBLIC_API_URL}/ocorrencias/${bairro.id}`, {
-                headers: HEADER,
-            });
-            setModalInfo({ visible: true, bairro: bairro.nome, ocorrencias: response.data, loading: false });
-        } catch (error) {
-            toast.error('Erro ao buscar ocorrências!');
-            setModalInfo({ visible: true, bairro: bairro.nome, ocorrencias: null, loading: false });
-        }
-    };
+                setModalInfo({ visible: true, bairro, ocorrencia: null, loading: true });
+                const response = await axios.get(`${NEXT_PUBLIC_API_URL}/ocorrencias/${ocorrencia.id}}`, {
+                    headers: HEADERS,
+                });
+                setModalInfo({ visible: true, bairro: bairro.nome, ocorrencia: response.data , loading: false });
+            } catch (error) {
+                toast.error('Erro ao buscar ocorrências!');
+                setModalInfo({ visible: true, bairro, ocorrencia: null, loading: false });
+            }
+        };
 
     const paginatedBairros = () => {
         const start = (data.current - 1) * data.pageSize;
@@ -82,7 +75,6 @@ export default function Bairros() {
                     current: page,
                     pageSize: pageSize,
                 }))}
-                style={{ marginTop: 16, textAlign: 'center' }}
             />
             {redirectLoading && ( 
                 <Image src="/image/carregando.gif" alt="carregando" whidth={220}height={220} className={styles.loadingImage}  />
@@ -97,10 +89,10 @@ export default function Bairros() {
                             key={bairro.id}
                             title={bairro.nome}
                             className={styles.card}
-                            onClick={() => handleCardClick(bairro)} 
+                            onClick={() => openModal()} 
                         >
-                            <span className={styles.span}>Cidade: {bairro.cidade} - Bairro: {bairro.estado}</span>
-                            <span className={styles.span}>ID: {bairro.id} - Nome: {bairro.nome}</span> 
+                            <span className={styles.span}>Cidade: {bairro.cidade} | Estado: {bairro.estado}</span>
+                            <span className={styles.span}>ID: {bairro.id} | Nome: {bairro.nome}</span> 
                         </Card>
                     ))
                 )}
@@ -116,7 +108,15 @@ export default function Bairros() {
                 ) : modal.ocorrencia ? ( 
                     <div>
                         <h3>Ocorrências:</h3>
-                        <pre>{JSON.stringify(modal.ocorrencia, null, 2)}</pre> 
+                        <ul>
+                            {modal.ocorrencia.map((ocorrencia, bairro) => (
+                                <li key={ocorrencia.id}>
+                                    <strong>ID:</strong> {ocorrencia.id} 
+                                    <strong>Local:</strong> {ocorrencia.bairro_id ? bairro.nome : 'Desconhecido'}
+                                    <strong> Descrição:</strong> {ocorrencia.descricao}
+                                </li>
+                            ))}
+                        </ul>
                     </div>
                 ) : (
                     <p>Nenhuma ocorrência encontrada.</p>

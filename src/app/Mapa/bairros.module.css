@@ -66,25 +66,24 @@
     border: 1px solid #c0c0a8;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.2s, box-shadow 0.2s;
     cursor: pointer;
+    gap: 1rem;
   }
   
   .card:hover {
     transform: translateY(-5px);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
   }
-
-  .cardMeta{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 15px;
-  }
   
   .span{
+    width: 100%;
+    display: flex;
+    text-align: center;
     color: black;
   }
 
